@@ -6,9 +6,13 @@ var text = document.getElementsByTagName('input')[0];
 var btnSave = document.getElementById('btnSalvar');
 var container = document.querySelector('.container');
 
+// Criando um array no localstorage
+var array = [];
+localStorage.setItem('Tarefas', JSON.stringify(array))
 // Função que gera tarefa
 
 function newTask(txt){
+    // Criando e anexando cada elemento da task
     var tarefa = document.createElement('div');
     tarefa.classList.add('tarefa');
 
@@ -32,10 +36,17 @@ function newTask(txt){
 
     container.appendChild(tarefa)
 
+    // Fazendo o check da tarefa
     img0.addEventListener('click', function(){check(img0)})
     tarefa.addEventListener('dblclick', function(){
         check(img0)
     })
+
+    // Armazenando no localStorage
+    var recoveryArray = JSON.parse(localStorage.getItem('Tarefas'))
+    recoveryArray.push(txt)
+    localStorage.setItem('Tarefas', JSON.stringify(recoveryArray))
+
 }
 
 // Função que alterna a confirmação da tarefa
