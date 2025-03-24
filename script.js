@@ -20,7 +20,7 @@ function newTask(txt){
     btnCheck.id = 'checkTask';
     tarefa.appendChild(btnCheck);
     var img0 = document.createElement('img');
-    img0.src = 'assets/check.png';
+    img0.src = 'http://127.0.0.1:5500/assets/png.webp'
     btnCheck.appendChild(img0);
 
     var btnDelete = document.createElement('button');
@@ -31,6 +31,22 @@ function newTask(txt){
     btnDelete.appendChild(img1);
 
     container.appendChild(tarefa)
+
+    img0.addEventListener('click', function(){check(img0)})
+    tarefa.addEventListener('dblclick', function(){
+        check(img0)
+    })
+}
+
+// Função que alterna a confirmação da tarefa
+function check(img){
+    if(img.src == 'http://127.0.0.1:5500/assets/check.png'){
+        img.src = 'assets/png.webp';
+    }
+    else if(img.src == 'http://127.0.0.1:5500/assets/png.webp'){
+        img.src = 'assets/check.png'
+    }
+    
 }
 
 newTask('NomeTarefa')
