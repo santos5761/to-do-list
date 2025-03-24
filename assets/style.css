@@ -48,6 +48,8 @@ h1{
     width: 90%;
     justify-content: space-around;
     align-items: center;
+    flex-wrap: wrap;
+    gap:1rem;
 }
 
 
