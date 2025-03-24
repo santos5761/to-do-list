@@ -60,4 +60,20 @@ function check(img){
     
 }
 
+// Função que deleta Task
+
 newTask('NomeTarefa')
+
+
+// Função que traz todas as tasks armazenadas
+function trazendoTasks(){
+    var recoveryTasks = JSON.parse(localStorage.getItem('Tarefas'));
+    recoveryTasks.forEach(nameTask => {
+        newTask(nameTask)
+    });
+}
+
+// Trazendo tasks que estão no localStorage ao entrar no site
+trazendoTasks()
+
+// Adicionando nova Task
