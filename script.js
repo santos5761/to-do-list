@@ -44,8 +44,12 @@ function newTask(txt){
     container.appendChild(tarefa)
 
     // Fazendo o check da tarefa
-    img0.addEventListener('click', function(){check(img0)})
     tarefa.addEventListener('dblclick', function(){
+        check(img0)
+    })
+
+    // Fazendo o check da task
+    img0.addEventListener('click', function(){
         check(img0)
     })
 
@@ -62,26 +66,9 @@ function check(img){
         img.src = 'assets/png.webp';
     }
     else{
-        img.src = 'assets/check.png'
+        img.src = 'assets/check.png';
     }
 }
-
-// Fazendo o check da tarefa fora da criação do card
-// setTimeOut de 1 segundo para todos os elementos serem carreados
-setTimeout(() => {
-    var imgChecks = document.getElementsByClassName('imagens');
-    var checksArray = Array.from(imgChecks);
-    console.log(checksArray);
-
-    checksArray.forEach(img=>{
-        img.addEventListener('click', function(img){
-            check(img)
-        })
-    })
-
-    
-
-}, 1000); 
 
 
 // Função que traz todas as tasks armazenadas
