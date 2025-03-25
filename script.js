@@ -76,36 +76,46 @@ function trazendoTasks(){
 // Trazendo tasks que estão no localStorage ao entrar no site
  trazendoTasks()
 
+// Função que salva nova task
+function saveTask(){
+        // Verifica se a tarefa não está sendo criada vazia
+        if(text.value != ''){
+            // Trazendo todos os elementos do localStorage
+            var recoveryArray = JSON.parse(localStorage.getItem('Tarefas'))
+            // Adicionando o novo valor ao array
+            recoveryArray.push(text.value)
+            // Devolvend o array para o localStorage
+            localStorage.setItem('Tarefas', JSON.stringify(recoveryArray));
+        
+            // Executando a função que traz as tasks
+            trazendoTasks()
+        
+            // Limpa o input de texto
+            text.value = '';
+            text.placeholder = 'Insira o nome da tarefa aqui'
+        }
+        // Caso vazia, muda o placeholder do input
+        else{
+            text.placeholder = 'A tarefa deve ter um nome!!!';
+        }        
+}
+
 // Adicionando nova Task ao clicar no btnSave
 btnSave.addEventListener('click', function(){
-    // Verifica se a tarefa não está sendo criada vazia
-    if(text.value != ''){
-    // Trazendo todos os elementos do localStorage
-    var recoveryArray = JSON.parse(localStorage.getItem('Tarefas'))
-    // Adicionando o novo valor ao array
-    recoveryArray.push(text.value)
-    // Devolvend o array para o localStorage
-    localStorage.setItem('Tarefas', JSON.stringify(recoveryArray));
+    saveTask();
+})
 
-    // Executando a função que traz as tasks
-    trazendoTasks()
-
-    // Limpa o input de texto
-    text.value = '';
-    text.placeholder = 'Insira o nome da tarefa aqui'
-}
-// Caso vazia, muda o placeholder do input
-else{
-    text.placeholder = 'A tarefa deve ter um nome!!!';
-}
-
-
+// Adicionando nova Task ao pressionar a tecla Enter
+text.addEventListener('keypress', function(event){
+    if(event.key == 'Enter'){
+        saveTask();
+    }
 })
 
 // Limpando Lista de tarefas
 btnLimpar.addEventListener('click', function(){
     // Limpa o localStorage
-    localStorage.clear();
+    localStorage.removeItem('Tarefas');
     // Limpa o container
     container.innerHTML = '';
     // Adiciona novamente key e value 
