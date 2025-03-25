@@ -3,6 +3,7 @@
 // Capturando elementos
 var text = document.getElementsByTagName('input')[0];
 var btnSave = document.getElementById('btnSalvar');
+var btnLimpar = document.getElementById('btnLimpar');
 var container = document.querySelector('.container');
 
 // Criando um array no localstorage
@@ -77,6 +78,8 @@ function trazendoTasks(){
 
 // Adicionando nova Task ao clicar no btnSave
 btnSave.addEventListener('click', function(){
+    // Verifica se a tarefa não está sendo criada vazia
+    if(text.value != ''){
     // Trazendo todos os elementos do localStorage
     var recoveryArray = JSON.parse(localStorage.getItem('Tarefas'))
     // Adicionando o novo valor ao array
@@ -86,5 +89,25 @@ btnSave.addEventListener('click', function(){
 
     // Executando a função que traz as tasks
     trazendoTasks()
+
+    // Limpa o input de texto
+    text.value = '';
+    text.placeholder = 'Insira o nome da tarefa aqui'
+}
+// Caso vazia, muda o placeholder do input
+else{
+    text.placeholder = 'A tarefa deve ter um nome!!!';
+}
+
+
 })
 
+// Limpando Lista de tarefas
+btnLimpar.addEventListener('click', function(){
+    // Limpa o localStorage
+    localStorage.clear();
+    // Limpa o container
+    container.innerHTML = '';
+    // Adiciona novamente key e value 
+    localStorage.setItem('Tarefas', JSON.stringify(array))
+})
