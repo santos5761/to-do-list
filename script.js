@@ -32,6 +32,7 @@ function newTask(txt){
     var img0 = document.createElement('img');
     img0.src = 'http://127.0.0.1:5500/assets/png.webp'
     btnCheck.appendChild(img0);
+    img0.classList.add('imagens')
     // btn delete da task
     var btnDelete = document.createElement('button');
     btnDelete.id = 'deleteTask';
@@ -48,6 +49,11 @@ function newTask(txt){
         check(img0)
     })
 
+    // Deletando uma tarefa
+    btnDelete.addEventListener('click',function(){
+        deleteTask(txt)
+    })
+
 }
 
 // Função que alterna a confirmação da tarefa
@@ -59,6 +65,24 @@ function check(img){
         img.src = 'assets/check.png'
     }
 }
+
+// Fazendo o check da tarefa fora da criação do card
+// setTimeOut de 1 segundo para todos os elementos serem carreados
+setTimeout(() => {
+    var imgChecks = document.getElementsByClassName('imagens');
+    var checksArray = Array.from(imgChecks);
+    console.log(checksArray);
+
+    checksArray.forEach(img=>{
+        img.addEventListener('click', function(img){
+            check(img)
+        })
+    })
+
+    
+
+}, 1000); 
+
 
 // Função que traz todas as tasks armazenadas
 function trazendoTasks(){
@@ -82,8 +106,18 @@ function saveTask(){
         if(text.value != ''){
             // Trazendo todos os elementos do localStorage
             var recoveryArray = JSON.parse(localStorage.getItem('Tarefas'))
+
+            // Verifica se já existe uma task com esse nome
+            if(!recoveryArray.includes(text.value)){
             // Adicionando o novo valor ao array
-            recoveryArray.push(text.value)
+            recoveryArray.push(text.value);
+            text.value = '';
+            text.placeholder = 'Insira o nome da tarefa aqui' 
+        }
+            else{
+                text.value = ''
+                text.placeholder = 'Esse item já existe!'
+            }
             // Devolvend o array para o localStorage
             localStorage.setItem('Tarefas', JSON.stringify(recoveryArray));
         
@@ -91,8 +125,7 @@ function saveTask(){
             trazendoTasks()
         
             // Limpa o input de texto
-            text.value = '';
-            text.placeholder = 'Insira o nome da tarefa aqui'
+            
         }
         // Caso vazia, muda o placeholder do input
         else{
@@ -121,3 +154,19 @@ btnLimpar.addEventListener('click', function(){
     // Adiciona novamente key e value 
     localStorage.setItem('Tarefas', JSON.stringify(array))
 })
+
+// Função que apaga task
+function deleteTask(txt){
+    var fullArray = JSON.parse(localStorage.getItem('Tarefas'));
+    var index = fullArray.indexOf(txt);
+    fullArray.splice(index, 1); 
+    if(fullArray.length>0){
+        localStorage.setItem('Tarefas', JSON.stringify(fullArray));
+    }
+
+    else{
+        localStorage.setItem('Tarefas', JSON.stringify(array))
+    }
+    
+    trazendoTasks();
+}
