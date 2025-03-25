@@ -17,26 +17,28 @@ if(chaves == null){
 }
 // Função que gera tarefa
 
-function newTask(txt){
+function newTask(task){
     // Criando e anexando cada elemento da task
     var tarefa = document.createElement('div');
     tarefa.classList.add('tarefa');
     // txt da task
     var name = document.createElement('p');
-    name.innerText = txt;
+    name.innerText = task.name;
     tarefa.appendChild(name);
     // btn de check da task
     var btnCheck = document.createElement('button');
     btnCheck.id = 'checkTask';
     tarefa.appendChild(btnCheck);
+
     var img0 = document.createElement('img');
-    img0.src = 'http://127.0.0.1:5500/assets/png.webp'
+     img0.src = task.checked ? 'assets/check.png' : 'assets/png.webp'; // Aplica estado salvo
     btnCheck.appendChild(img0);
     img0.classList.add('imagens')
     // btn delete da task
     var btnDelete = document.createElement('button');
     btnDelete.id = 'deleteTask';
     tarefa.appendChild(btnDelete);
+
     var img1 = document.createElement('img');
     img1.src = 'assets/trash.png';
     btnDelete.appendChild(img1);
@@ -49,27 +51,19 @@ function newTask(txt){
     })
 
     // Fazendo o check da task
-    img0.addEventListener('click', function(){
-        check(img0)
-    })
+    // Fazendo o check da tarefa e salvando o estado
+    img0.addEventListener('click', function () {
+        task.checked = !task.checked; // Alterna estado
+        img0.src = task.checked ? 'assets/check.png' : 'assets/png.webp';
+        updateTask(task); // Salva mudança no localStorage
+    });
 
     // Deletando uma tarefa
     btnDelete.addEventListener('click',function(){
-        deleteTask(txt)
+        deleteTask(task)
     })
 
 }
-
-// Função que alterna a confirmação da tarefa
-function check(img){
-    if(img.src == 'http://127.0.0.1:5500/assets/check.png'){
-        img.src = 'assets/png.webp';
-    }
-    else{
-        img.src = 'assets/check.png';
-    }
-}
-
 
 // Função que traz todas as tasks armazenadas
 function trazendoTasks(){
@@ -79,8 +73,8 @@ function trazendoTasks(){
     // Trazendo conteudo do localStorage
     var recoveryTasks = JSON.parse(localStorage.getItem('Tarefas'));
     // Percorrendo cada elemento do localStorage e aplicando a função que gera car da tarefa
-    recoveryTasks.forEach(nameTask => {
-        newTask(nameTask)
+    recoveryTasks.forEach(task => {
+        newTask(task)
     });
 }
 
@@ -88,36 +82,24 @@ function trazendoTasks(){
  trazendoTasks()
 
 // Função que salva nova task
-function saveTask(){
-        // Verifica se a tarefa não está sendo criada vazia
-        if(text.value != ''){
-            // Trazendo todos os elementos do localStorage
-            var recoveryArray = JSON.parse(localStorage.getItem('Tarefas'))
+function saveTask() {
+    if (text.value != '') {
+        var recoveryArray = JSON.parse(localStorage.getItem('Tarefas'));
 
-            // Verifica se já existe uma task com esse nome
-            if(!recoveryArray.includes(text.value)){
-            // Adicionando o novo valor ao array
-            recoveryArray.push(text.value);
+        if (!recoveryArray.some(task => task.name === text.value)) {
+            recoveryArray.push({ name: text.value, checked: false }); // Agora armazena o estado checked
             text.value = '';
-            text.placeholder = 'Insira o nome da tarefa aqui' 
+            text.placeholder = 'Insira o nome da tarefa aqui';
+        } else {
+            text.value = '';
+            text.placeholder = 'Esse item já existe!';
         }
-            else{
-                text.value = ''
-                text.placeholder = 'Esse item já existe!'
-            }
-            // Devolvend o array para o localStorage
-            localStorage.setItem('Tarefas', JSON.stringify(recoveryArray));
-        
-            // Executando a função que traz as tasks
-            trazendoTasks()
-        
-            // Limpa o input de texto
-            
-        }
-        // Caso vazia, muda o placeholder do input
-        else{
-            text.placeholder = 'A tarefa deve ter um nome!!!';
-        }        
+
+        localStorage.setItem('Tarefas', JSON.stringify(recoveryArray));
+        trazendoTasks();
+    } else {
+        text.placeholder = 'A tarefa deve ter um nome!!!';
+    }
 }
 
 // Adicionando nova Task ao clicar no btnSave
@@ -143,17 +125,28 @@ btnLimpar.addEventListener('click', function(){
 })
 
 // Função que apaga task
-function deleteTask(txt){
+function deleteTask(task) {
     var fullArray = JSON.parse(localStorage.getItem('Tarefas'));
-    var index = fullArray.indexOf(txt);
-    fullArray.splice(index, 1); 
-    if(fullArray.length>0){
-        localStorage.setItem('Tarefas', JSON.stringify(fullArray));
+    
+    // Encontrar o índice corretamente usando findIndex()
+    var index = fullArray.findIndex(t => t.name === task.name);
+    
+    if (index !== -1) {
+        fullArray.splice(index, 1); // Remove a tarefa do array
     }
 
-    else{
-        localStorage.setItem('Tarefas', JSON.stringify(array))
-    }
+    localStorage.setItem('Tarefas', JSON.stringify(fullArray)); // Atualiza o LocalStorage
     
-    trazendoTasks();
+    trazendoTasks(); // Atualiza a interface
+}
+
+// Salvando mudanças de marcação do usuário;
+function updateTask(updatedTask) {
+    var recoveryArray = JSON.parse(localStorage.getItem('Tarefas'));
+
+    var index = recoveryArray.findIndex(task => task.name === updatedTask.name);
+    if (index !== -1) {
+        recoveryArray[index] = updatedTask;
+        localStorage.setItem('Tarefas', JSON.stringify(recoveryArray));
+    }
 }
