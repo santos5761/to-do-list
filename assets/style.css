@@ -17,10 +17,16 @@ body{
     gap:1rem;
     margin:2rem 0 2rem 0;
     overflow-x: hidden;
+    background-image: url(background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 h1{
     font-size: 3rem;
+    background-color: aliceblue;
+    padding: 1rem;
+    border-radius: 5px;
 }
 
 /* Campo de criação de tarefa */
@@ -34,24 +40,24 @@ h1{
     padding: 1rem;
     border-radius: .5rem;
     border: none;
-    background-color:aquamarine;
+    background-color:aliceblue;
 }
 
 .salvar_tarefa button{
-    background-color: greenyellow;
+    background-color: rosybrown;
+    color: aliceblue;
     cursor: pointer;
 }
 
 /* Local onde aparecem as tasks */
 .container{
-    display: flex;
+    display: grid;
     width: 90%;
-    justify-content: space-around;
-    align-items: center;
     flex-wrap: wrap;
     gap:1rem;
+    grid-template-columns:auto auto auto;
+    justify-content: center;
 }
-
 
 /* task */
 .container .tarefa{
@@ -59,8 +65,10 @@ h1{
     gap:1rem;
     padding: 1rem;
     align-items: center;
-    border-radius:10%;
+    border-radius: 5px;
     border: 1px solid black;
+    background-color: aliceblue;
+    justify-content: space-around;
 }
 
 .container .tarefa p{
@@ -85,4 +93,33 @@ h1{
     border-radius: 50%;
     border: none;
     cursor: pointer;
+}
+
+@media(max-width:900px){
+    html{
+        font-size: 57%;
+    }
+
+    .container .tarefa{
+        gap:.5rem;
+        padding: .5rem;
+    }
+}
+
+@media(max-width:730px){
+    .container{
+        grid-template-columns: 30rem 30rem;
+    }
+}
+
+@media(max-width:590px){
+    .container{
+        grid-template-columns: 25rem 25rem;
+    }
+}
+
+@media(max-width:515px){
+    .container{
+        grid-template-columns: 30rem;
+    }
 }
